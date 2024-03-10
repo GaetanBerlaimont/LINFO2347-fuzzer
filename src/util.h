@@ -96,6 +96,6 @@ int setup(int fd, struct tar_t *header, int wich_tar);
  *          1 if a crash for the extractor is found.
  *
  */
-int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_elem, int size, int reset);
+int fillHeader( char* argv[], int fd, struct tar_t *header, int wich_elem, int size, int reset);
 
 #endif

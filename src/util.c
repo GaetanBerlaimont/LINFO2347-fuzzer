@@ -10,7 +10,7 @@ int launch(char* argv[]){
     char cmd[51];
     strncpy(cmd, argv[1], 25);
     cmd[26] = '\0';
-    strncat(cmd, " archive.tar", 25);
+    strncat(cmd, " archives/archive.tar", 25);
     char buf[33];
     FILE *fp;
 
@@ -57,26 +57,27 @@ unsigned int calculate_checksum(struct tar_t* entry){
     return check;
 }
 
-int setup(int fd, struct tar_t *header, int wich_tar){
+int setup(int fd, struct tar_t *header, int which_tar){
     if(close(fd) == -1) {
         printf("Command not found\n");
+        return -1;
     }
-    remove("archive.tar");
-    switch (wich_tar){
+    remove("archives/archive.tar");
+    switch (which_tar){
         case BASIC:
-            system("cp archive_basic.tar archive.tar");
+            system("cp archives/archive_basic.tar archives/archive.tar");
             break;
         case MEDIUM:
-            system("cp archive_medium.tar archive.tar");
+            system("cp archives/archive_medium.tar archives/archive.tar");
             break;
         case LINKED:
-            system("cp archive_linked.tar archive.tar");
+            system("cp archives/archive_linked.tar archives/archive.tar");
             break;
         default : 
             printf("error wrong input\n");
             return -1;
     }
-    if ((fd = open("archive.tar", O_RDWR, O_SYNC)) == -1) {
+    if ((fd = open("archives/archive.tar", O_RDWR, O_SYNC)) == -1) {
         printf("Error opening file!\n");
         return -1;
     }
@@ -86,15 +87,16 @@ int setup(int fd, struct tar_t *header, int wich_tar){
         if(close(fd) == -1) {
             printf("Command not found\n");
         }
+
         return -1;
     }
     return 0;
 }
 
-int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_elem, int size, int reset){
+int fillHeader(char* argv[], int fd, struct tar_t *header, int which_elem, int size, int reset){
     int ret;
     char * H;
-    switch (wich_elem) {
+    switch (which_elem) {
         case NAME:
             H = header->name;
             break;
@@ -139,12 +141,12 @@ int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_el
             H[pos] = val;
 
             calculate_checksum(header);
-            lseek(fd,0,SEEK_SET);// we need to get the fd pointer at the begining of the file to write on the same place (because we read previously)
+            lseek(fd,0,SEEK_SET);// we need to get the fd pointer at the beginning of the file to write on the same place (because we read previously)
             if (write(fd, (void*) header, sizeof(struct tar_t)) == -1) {
                 printf("Error writing file!\n");
                 return -1;
             }
-            ret = launch(argv);// we found a succesfull crash
+            ret = launch(argv);// we found a successful crash
             if (ret == 1){
                 return 1;
             }
