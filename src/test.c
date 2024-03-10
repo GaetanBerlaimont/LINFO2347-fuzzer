@@ -304,13 +304,16 @@ void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
         if (write(tar, (void *) header, sizeof(struct tar_t)) == -1) {
             printf("Error writing file!\n");
             return;
-            if (ret == 1) {
-                printf("cheksum bugged = %s\n", header->chksum);
-                system("cp archive.tar success_cheksum.tar");
-                return;
-            }
-            counter++;
         }
+
+        ret = launch(argv);
+
+        if (ret == 1) {
+            printf("cheksum bugged = %s\n", header->chksum);
+            system("cp archive.tar success_cheksum.tar");
+            return;
+        }
+        counter++;
     }
 }
 
