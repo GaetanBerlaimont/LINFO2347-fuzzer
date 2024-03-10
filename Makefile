@@ -36,4 +36,3 @@ visu:
 
 clean:
 	rm -f src/*.o
-	touch src/vide.txt
