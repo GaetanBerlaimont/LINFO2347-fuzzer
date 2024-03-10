@@ -10,6 +10,7 @@
 int basic(int argc, char* argv[]);
 int medium(int argc, char* argv[]);
 int linked(int argc, char *argv[]);
+int dir(char *argv[]);
 
 
 int main(int argc, char* argv[])
@@ -18,6 +19,7 @@ int main(int argc, char* argv[])
         return -1;
 
     //perform test on basic archive
+
     basic(argc,argv);
     medium(argc,argv);
     linked(argc,argv);
@@ -138,6 +140,59 @@ int linked(int argc, char *argv[]){
     }
 
     test_linked_linkname(argv, tar, header);
+
+    finally:
+    if(close(tar) == -1) {
+        printf("Command not found\n");
+    }
+    free(header);
+    header=NULL;
+    return 0;
+}
+
+
+int dir(char *argv[]){
+    //initialisation variable
+    int tar;// folder
+    struct tar_t *header;
+    int ret;
+    header = (struct tar_t *) malloc(sizeof(struct tar_t));
+
+    //create a copy of the archive and perform test on the copied one
+    system("cp archives/archive_dir.tar archives/archive.tar");
+    if ((tar = open("archives/archive.tar", O_RDWR, O_SYNC)) == -1) {
+        printf("Error opening file!\n");
+        return -1;
+    }
+
+    //read of the first header
+    if (read(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+        printf("Error reading file!\n");
+        goto finally;
+    }
+
+    header->size[10] = '1';//ajoute que 1 seul caract TODO plus ex jusqu'a 20 ou 50...
+    calculate_checksum(header);
+    printf("size : %s\n",header->size);
+
+    lseek(tar, 0, SEEK_SET);
+    if (write(tar, (void *) header, sizeof(struct tar_t)) == -1) {
+        printf("Error writing file!\n");
+        return -1;
+    }
+    char c = -128;// peut etre n'importe quoi
+    if (write(tar, (void *) &c, 1) == -1) {
+        printf("Error writing file!\n");
+        return -1;
+    }
+
+    ret = launch(argv);
+
+    if (ret == 1) {
+        printf("cheksum bugged = %s\n", header->chksum);
+        system("cp archives/archive.tar success_size+data.tar");
+        return 1;
+    }
 
     finally:
     if(close(tar) == -1) {
