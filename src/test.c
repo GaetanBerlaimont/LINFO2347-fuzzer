@@ -268,7 +268,7 @@ void test_0byte(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-// Tess vulnerablility related to handling large checksum values in the tar header.
+// Test vulnerablility related to handling large checksum values in the tar header.
 // Generates random octal numbers within maximum range
 // for a 7-character checksum and calls chksum_single_test with each value.
 void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
@@ -288,7 +288,7 @@ void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
     //handle case if we found a succesfull attack
     if(ret==1){
         printf("cheksum bugged = %s\n", header->chksum);
-        system("cp archive.tar success_cheksum.tar");
+        system("cp archives/archive.tar archives/success_cheksum.tar");
         return;
     }
 
@@ -310,7 +310,7 @@ void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
 
         if (ret == 1) {
             printf("cheksum bugged = %s\n", header->chksum);
-            system("cp archive.tar success_cheksum.tar");
+            system("cp archives/archive.tar success_cheksum.tar");
             return;
         }
         counter++;
@@ -347,9 +347,57 @@ void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header)
 
         if(ret==1){
             printf("cheksum bugged = %s\n", header->chksum);
-            system("cp archive.tar success_cheksum.tar");
+            system("cp archives/archive.tar success_cheksum.tar");
             return;
         }
+    }
+}
+
+/*|-----------------------------------------------------------------|*/
+/*|                          TEST with size                         |*/
+/*|-----------------------------------------------------------------|*/
+void test_medium_size1(char *argv[], int tar, struct tar_t *header) {
+    //---------modify first header--------------
+
+    int ret = fillHeader( argv, tar, header, SIZE, 12,1);
+
+    if(ret == 1){
+        printf("size bugged : %s\n",header->size);
+        system("cp archives/archive.tar success_size.tar");
+    }
+
+    //---------modify second header-----------
+    setup(tar,header,MEDIUM);
+    // go to next header
+    int ONE = 1;
+    if(TAR_INT(header->size)%512 == 0){
+        ONE = 0;
+    }
+    lseek(tar,(TAR_INT(header->size)/512 + ONE) *512,SEEK_CUR);
+
+    //read next header
+    if (read(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+        printf("Error reading file!\n");
+        return;
+    }
+
+    printf("second header name : %s\n",header->name);
+
+    ret = fillHeader( argv, tar, header, SIZE, 12, 1);
+    if(ret == 1){
+        printf("size bugged : %s\n",header->size);
+        system("cp archives/archive.tar success_size.tar");
+    }
+}
+
+/*|-----------------------------------------------------------------|*/
+/*|                        TEST with linkname                       |*/
+/*|-----------------------------------------------------------------|*/
+void test_linked_linkname(char *argv[], int tar, struct tar_t *header) {
+    int ret = fillHeader(argv,tar,header,LINKNAME,100,0);
+    if(ret == 1){
+        printf("linkname bugged : %s\n",header->linkname);
+        system("cp archives/archive.tar success_linkname.tar");
     }
 }
 
