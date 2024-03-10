@@ -21,11 +21,17 @@ void test_linkname1(char *argv[], int tar, struct tar_t *header);
 
 void test_magic1(char *argv[], int tar, struct tar_t *header);
 
+void test_version1(char *argv[], int tar, struct tar_t *header);
+
 void test_uname1(char *argv[], int tar, struct tar_t *header);
 
 void test_gname1(char *argv[], int tar, struct tar_t *header);
 
 void test_0byte(char *argv[], int tar, struct tar_t *header);
+
+void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header);
+
+void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header);
 
 
 #endif //SRC_TEST_H

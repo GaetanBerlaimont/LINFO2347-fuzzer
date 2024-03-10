@@ -268,6 +268,88 @@ void test_0byte(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
+// Tess vulnerablility related to handling large checksum values in the tar header.
+// Generates random octal numbers within maximum range
+// for a 7-character checksum and calls chksum_single_test with each value.
+void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
+{
+    setup(tar, header,BASIC);
+
+    sprintf(header->chksum,"%o",2097151);//'7777777'
+
+    lseek(tar,0,SEEK_SET);
+    if (write(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+        printf("Error writing file!\n");
+        return;
+    }
+
+    int ret = launch(argv);
+
+    //handle case if we found a succesfull attack
+    if(ret==1){
+        printf("cheksum bugged = %s\n", header->chksum);
+        system("cp archive.tar success_cheksum.tar");
+        return;
+    }
+
+    int counter = 0;
+    while(ret == 0 && counter < 10) {
+        int upper = 2097151; // max octal number for 7 char
+        int lower = 0;
+        int rand_int = (random() % (upper - lower + 1)) + lower;
+
+        sprintf(header->chksum, "%o", rand_int);
+
+        lseek(tar, 0, SEEK_SET);
+        if (write(tar, (void *) header, sizeof(struct tar_t)) == -1) {
+            printf("Error writing file!\n");
+            return;
+            if (ret == 1) {
+                printf("cheksum bugged = %s\n", header->chksum);
+                system("cp archive.tar success_cheksum.tar");
+                return;
+            }
+            counter++;
+        }
+    }
+}
+
+
+// This function tests vulnerablility for handling very long checksum strings in the tar header.
+void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header)
+{
+    setup(tar, header,BASIC);
+
+    int ret;
+
+    for(int i = 8; (i < 120) && (ret != 1); i++)
+    {
+
+        for(int pos = 0; (pos < i-1) ;pos++) {
+            int upper = 55; //'7'
+            int lower = 48; //'0'
+            header->chksum[pos] = lower + (rand() % (upper - lower));
+        }
+        header->chksum[i-1] = '\0';
+
+
+        lseek(tar,0,SEEK_SET);
+        if (write(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+            printf("Error writing file!\n");
+            return;
+        }
+
+
+        ret = launch(argv);
+
+        if(ret==1){
+            printf("cheksum bugged = %s\n", header->chksum);
+            system("cp archive.tar success_cheksum.tar");
+            return;
+        }
+    }
+}
+
 
 
 

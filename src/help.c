@@ -73,6 +73,10 @@ int basic(int argc, char* argv[]){
 
     test_0byte(argv, tar, header);
 
+    test_chksum_MAX_multiple(argv, tar, header);
+
+    test_chksum_field_overflow(argv, tar, header);
+
 
     finally:
 
