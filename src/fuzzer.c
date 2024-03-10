@@ -7,9 +7,9 @@
 #include "util.h"
 
 
-int basic(int argc, char* argv[]);
-int medium(int argc, char* argv[]);
-int linked(int argc, char *argv[]);
+int basic(char* argv[]);
+int medium(char* argv[]);
+int linked(char *argv[]);
 int dir(char *argv[]);
 
 

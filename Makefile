@@ -3,13 +3,13 @@ CC := gcc
 CFLAGS := -Wall
 
 PROG := fuzzer
-OBJS := src/help.o src/util.o src/test.o
+OBJS := src/fuzzer.o src/util.o src/test.o
 
 all: $(PROG)
 	./fuzzer ./extractor_x86_64
 
 %.o: src/%.c
-	$(CC) -c $(CFLAGS) src/help.c
+	$(CC) -c $(CFLAGS) src/fuzzer.c
 	$(CC) -c $(CFLAGS) src/util.c
 	$(CC) -c $(CFLAGS) src/test.c
 
