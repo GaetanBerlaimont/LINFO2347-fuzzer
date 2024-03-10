@@ -13,21 +13,18 @@ int linked(int argc, char *argv[]);
 int dir(char *argv[]);
 
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     if (argc < 2)
         return -1;
 
-    //perform test on basic archive
-
-    basic(argc,argv);
-    medium(argc,argv);
-    linked(argc,argv);
-
+    basic(argv);
+    medium(argv);
+    linked(argv);
+    dir(argv);
 }
 
 
-int basic(int argc, char* argv[]){
+int basic(char* argv[]){
     //initialisation variable
     int tar;// folder
     struct tar_t *header;
@@ -90,7 +87,7 @@ int basic(int argc, char* argv[]){
 }
 
 
-int medium(int argc, char* argv[]){
+int medium(char* argv[]){
     //initialisation variable
     int tar;// folder
     struct tar_t *header;
@@ -120,7 +117,7 @@ int medium(int argc, char* argv[]){
     return 0;
 }
 
-int linked(int argc, char *argv[]){
+int linked(char *argv[]){
     //initialisation variable
     int tar;// folder
     struct tar_t *header;
