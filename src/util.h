@@ -60,7 +60,7 @@ struct tar_t
  * BONUS (for fun, no additional marks) without modifying this code,
  * compile it and use the executable to restart our computer.
  */
-int launch(int argc, char* argv[]);
+int launch(char* argv[]);
 
 /**
  * Computes the checksum for a tar header and encode it on the header

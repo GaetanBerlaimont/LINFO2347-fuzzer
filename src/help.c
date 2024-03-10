@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#include "test.h"
 #include "util.h"
 
 
@@ -29,9 +30,9 @@ int main(int argc, char* argv[])
         return -1;
 
     //perform test on basic archive
-    //basic(argc,argv);
+    basic(argc,argv);
     //medium(argc,argv);
-    linked(argc,argv);
+    //linked(argc,argv);
 
 }
 
@@ -55,44 +56,15 @@ int basic(int argc, char* argv[]){
         printf("Error reading file!\n");
         goto finally;
     }
-    goto finally;
-/*|-----------------------------------------------------------------|*/
-/*|                TEST with name (duplicate header)                |*/
-/*|-----------------------------------------------------------------|*/
-    for (int j = 0; j < 100; j++){
-        //range of all non ASCII char [127,283]
-        for (int val = 127; val < 283; val++)
-        {
-            header->name[j] = val;
 
-            calculate_checksum(header);
 
-            //write new name but after the current fd pointer -> we duplicate the first header
-            //lseek(tar,0,SEEK_SET);
-            if (write(tar, (void*) header, sizeof(struct tar_t)) == -1) {
-                printf("Error writing file!\n");
-                goto name_step;
-            }        
-
-            ret = launch(argc,argv);
-
-            //handle case if we found a succesfull attack
-            if(ret==1){
-                printf("duplicate header name bugged = %s\n",header->name);
-                system("cp archive.tar success_name_duplicateHeader.tar");
-                goto name_step;
-            }else{
-                remove(header->name);
-            }
-        }
-    }
-    name_step:
+    test_name(argv, tar, header);
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with name                         |*/
 /*|-----------------------------------------------------------------|*/
     setup(tar,header,BASIC);
 
-    for (int j = 0; j < 100; j++){//replace 1 by 100
+    for (int j = 0; j < 100 ; j++){//replace 1 by 100
         //range of all non ASCII char [127,283]
         for (int val = 127; val < 283; val++)
         {           
@@ -107,7 +79,7 @@ int basic(int argc, char* argv[]){
                 goto mode_step;
             }        
 
-            ret = launch(argc,argv);
+            ret = launch(argv);
 
             //handle case if we found a succesfull attack
             if(ret==1){
@@ -202,7 +174,7 @@ int basic(int argc, char* argv[]){
             goto linkname_step;
         }
 
-        ret = launch(argc,argv);
+        ret = launch(argv);
 
         //handling case we found succes crash
         if (ret == 1){
@@ -291,7 +263,7 @@ int basic(int argc, char* argv[]){
     lseek(tar,0,SEEK_SET);
     write(tar,tab,512);
 
-    ret = launch(argc,argv);
+    ret = launch(argv);
     if(ret == 1){
         printf("header with all 0 bugged ");
         system("cp archive.tar success_empty.tar");

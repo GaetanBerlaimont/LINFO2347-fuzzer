@@ -5,7 +5,7 @@
 #include "util.h"
 
 
-int launch(int argc, char* argv[]){
+int launch(char* argv[]){
     int rv = 0;
     char cmd[51];
     strncpy(cmd, argv[1], 25);
@@ -144,7 +144,7 @@ int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_el
                 printf("Error writing file!\n");
                 return -1;
             }
-            ret = launch(argc,argv);// we found a succesfull crash
+            ret = launch(argv);// we found a succesfull crash
             if (ret == 1){
                 return 1;
             }
