@@ -8,6 +8,7 @@
 
 int basic(int argc, char* argv[]);
 int medium(int argc, char* argv[]);
+int linked(int argc, char *argv[]);
 
 int name = 0;
 int mode = 0;
@@ -28,8 +29,9 @@ int main(int argc, char* argv[])
         return -1;
 
     //perform test on basic archive
-    basic(argc,argv);
-    medium(argc,argv);
+    //basic(argc,argv);
+    //medium(argc,argv);
+    linked(argc,argv);
 
 }
 
@@ -53,6 +55,7 @@ int basic(int argc, char* argv[]){
         printf("Error reading file!\n");
         goto finally;
     }
+    goto finally;
 /*|-----------------------------------------------------------------|*/
 /*|                TEST with name (duplicate header)                |*/
 /*|-----------------------------------------------------------------|*/
@@ -87,7 +90,7 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with name                         |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
     for (int j = 0; j < 100; j++){//replace 1 by 100
         //range of all non ASCII char [127,283]
@@ -121,9 +124,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with mode                         |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,MODE,8);
+    ret = fillHeader(argc,argv,tar,header,MODE,8,0);
 
     if(ret == 1){
         printf("mode bugged : %s\n",header->mode);
@@ -134,9 +137,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with uid                          |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,UID,8);
+    ret = fillHeader(argc,argv,tar,header,UID,8,0);
     
     if(ret == 1){
         printf("uid bugged : %s\n",header->uid);
@@ -147,9 +150,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with gid                          |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,GID,8);
+    ret = fillHeader(argc,argv,tar,header,GID,8,0);
     
     if(ret == 1){
         printf("gid bugged : %s\n",header->gid);
@@ -160,9 +163,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with size                         |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,SIZE,12);
+    ret = fillHeader(argc,argv,tar,header,SIZE,12,0);
     
     if(ret == 1){
         printf("size bugged : %s\n",header->size);
@@ -173,9 +176,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with mtime                        |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,MTIME,12);
+    ret = fillHeader(argc,argv,tar,header,MTIME,12,0);
     
     if(ret == 1){
         printf("mtime bugged : %s\n",header->mtime);
@@ -186,7 +189,7 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                        TEST with typeflag                       |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
     for (char val = -128; val < 127; val++)
     {
@@ -214,9 +217,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                        TEST with lnikname                       |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,LINKNAME,100);
+    ret = fillHeader(argc,argv,tar,header,LINKNAME,100,0);
     
     if(ret == 1){
         printf("linkname bugged : %s\n",header->linkname);
@@ -227,9 +230,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with magic                        |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,MAGIC,6);
+    ret = fillHeader(argc,argv,tar,header,MAGIC,6,0);
     
     if(ret == 1){
         printf("magic bugged : %s\n",header->magic);
@@ -240,9 +243,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                         TEST with version                       |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,VERSION,2);
+    ret = fillHeader(argc,argv,tar,header,VERSION,2,0);
     
     if(ret == 1){
         printf("version bugged : %s\n",header->version);
@@ -253,9 +256,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with uname                        |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,UNAME,32);
+    ret = fillHeader(argc,argv,tar,header,UNAME,32,0);
     
     if(ret == 1){
         printf("uname bugged : %s\n",header->uname);
@@ -266,9 +269,9 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                          TEST with gname                        |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
 
-    ret = fillHeader(argc,argv,tar,header,GNAME,32);
+    ret = fillHeader(argc,argv,tar,header,GNAME,32,0);
     
     if(ret == 1){
         printf("gname bugged : %s\n",header->gname);
@@ -279,7 +282,7 @@ int basic(int argc, char* argv[]){
 /*|-----------------------------------------------------------------|*/
 /*|                       TEST with all byte 0                      |*/
 /*|-----------------------------------------------------------------|*/
-    setup(tar,header);
+    setup(tar,header,BASIC);
     char tab[512];
     for (int i = 0; i < 512; i++)
     {
@@ -306,9 +309,111 @@ int basic(int argc, char* argv[]){
 
 
 int medium(int argc, char* argv[]){
+    //initialisation variable
+    int tar;// folder
+    struct tar_t *header;
+    int ret;
+    int ONE;
+    header = (struct tar_t *) malloc(sizeof(struct tar_t));
+
+    //create a copy of the archive and perform test on the copied one
+    system("cp archive_medium.tar archive.tar");
+    if ((tar = open("archive.tar", O_RDWR, O_SYNC)) == -1) {
+        printf("Error opening file!\n");
+        return -1;
+    }
+
+    //read of the first header
+    if (read(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+        printf("Error reading file!\n");
+        goto finally;
+    }
+/*|-----------------------------------------------------------------|*/
+/*|                          TEST with size                         |*/
+/*|-----------------------------------------------------------------|*/
+    if (size==0){
+        //---------modify first header--------------
+        ret = fillHeader(argc, argv, tar, header, SIZE, 12,1);
+
+        if(ret == 1){
+            printf("size bugged : %s\n",header->size);
+            system("cp archive.tar success_size.tar");
+            size = 1;
+        }
+
+        //---------modify second header-----------
+        setup(tar,header,MEDIUM);
+        // go to next header
+        ONE = 1;
+        if(TAR_INT(header->size)%512 == 0){
+            ONE = 0;
+        }
+        lseek(tar,(TAR_INT(header->size)/512 + ONE) *512,SEEK_CUR);
+
+        //read next header
+        if (read(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+            printf("Error reading file!\n");
+            goto finally;
+        }
+
+        printf("second header name : %s\n",header->name);
+
+        ret = fillHeader(argc, argv, tar, header, SIZE, 12, 1);
+        if(ret == 1){
+            printf("size bugged : %s\n",header->size);
+            system("cp archive.tar success_size.tar");
+            size = 1;
+        }
+
+    }
+
+
+    finally:
+    if(close(tar) == -1) {
+        printf("Command not found\n");
+    }
+    free(header);
+    header=NULL;
+    return 0;
+}
+
+int linked(int argc, char *argv[]){
+    //initialisation variable
+    int tar;// folder
+    struct tar_t *header;
+    int ret;
+    header = (struct tar_t *) malloc(sizeof(struct tar_t));
+
+    //create a copy of the archive and perform test on the copied one
+    system("cp archive_linked.tar archive.tar");
+    if ((tar = open("archive.tar", O_RDWR, O_SYNC)) == -1) {
+        printf("Error opening file!\n");
+        return -1;
+    }
+
+    //read of the first header
+    if (read(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+        printf("Error reading file!\n");
+        goto finally;
+    }
+/*|-----------------------------------------------------------------|*/
+/*|                        TEST with linkname                       |*/
+/*|-----------------------------------------------------------------|*/
+    ret = fillHeader(argc,argv,tar,header,LINKNAME,100,0);
+    if(ret == 1){
+        printf("lnikname bugged : %s\n",header->linkname);
+        system("cp archive.tar success_linkname.tar");
+        linkname = 1;
+    }
 
 
 
 
+    finally:
+    if(close(tar) == -1) {
+        printf("Command not found\n");
+    }
+    free(header);
+    header=NULL;
     return 0;
 }

@@ -57,12 +57,25 @@ unsigned int calculate_checksum(struct tar_t* entry){
     return check;
 }
 
-int setup(int fd, struct tar_t *header){
+int setup(int fd, struct tar_t *header, int wich_tar){
     if(close(fd) == -1) {
         printf("Command not found\n");
     }
     remove("archive.tar");
-    system("cp archive_basic.tar archive.tar");
+    switch (wich_tar){
+        case BASIC:
+            system("cp archive_basic.tar archive.tar");
+            break;
+        case MEDIUM:
+            system("cp archive_medium.tar archive.tar");
+            break;
+        case LINKED:
+            system("cp archive_linked.tar archive.tar");
+            break;
+        default : 
+            printf("error wrong input\n");
+            return -1;
+    }
     if ((fd = open("archive.tar", O_RDWR, O_SYNC)) == -1) {
         printf("Error opening file!\n");
         return -1;
@@ -78,7 +91,7 @@ int setup(int fd, struct tar_t *header){
     return 0;
 }
 
-int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_elem, int size){
+int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_elem, int size, int reset){
     int ret;
     char * H;
     switch (wich_elem) {
@@ -135,6 +148,9 @@ int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_el
             if (ret == 1){
                 return 1;
             }
+        }
+        if (reset==1){
+            H[pos] = 0;
         }
     }
     return 0;

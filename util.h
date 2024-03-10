@@ -19,6 +19,12 @@
 #define UNAME     10
 #define GNAME     11
 
+
+#define BASIC      1
+#define MEDIUM     2
+#define LINKED     3
+
+
 struct tar_t
 {                              /* byte offset */
     char name[100];               /*   0 */
@@ -68,11 +74,12 @@ unsigned int calculate_checksum(struct tar_t* entry);
  * and pre load the first header by reading the first sizeof(struct tar_t) bytes.
  * @param fd file descriptor
  * @param header pointer to a header structure
+ * @param wich_tar flag to know wich archive it need to copy
  * @return -1 if an error occurred,
  *          0 if everything went good.
  *
  */
-int setup(int fd, struct tar_t *header);
+int setup(int fd, struct tar_t *header, int wich_tar);
 
 /**
  * try some combinations of all char value (from -128 to 127) in the current specified field, and launch the extractor.
@@ -83,11 +90,12 @@ int setup(int fd, struct tar_t *header);
  * @param header pointer to a header structure
  * @param wich_elem some flag value to know which elemnent from the header will be tested
  * @param size maximum number of char for which_elem
+ * @param reset if set to 1 will reset value of previous position to 0
  * @return -1 if an error occurred,
  *          0 if all the test performed without finding a crash for the extractor.
  *          1 if a crash for the extractor is found.
  *
  */
-int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_elem, int size);
+int fillHeader(int argc, char* argv[], int fd, struct tar_t *header, int wich_elem, int size, int reset);
 
 #endif
