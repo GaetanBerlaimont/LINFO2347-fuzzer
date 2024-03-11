@@ -132,7 +132,7 @@ void test_gname1(char *argv[], int fd, struct tar_t *header);
 void test_0byte(char *argv[], int fd, struct tar_t *header);
 
 /**
- * Test vulnerablility related to handling large checksum values in the tar header.
+ * Test vulnerability related to handling large checksum values in the tar header.
  * Generates random octal numbers within maximum range
  * for a 7-character checksum and calls chksum_single_test with each value.
  * @param argv contains the extractor name as first argument
@@ -143,7 +143,7 @@ void test_0byte(char *argv[], int fd, struct tar_t *header);
 void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header);
 
 /**
- * Test extending the field over the next one
+ * This function tests vulnerability for handling very long checksum strings in the tar header.
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -152,7 +152,8 @@ void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header);
 void test_chksum_field_overflow(char *argv[], int fd, struct tar_t *header);
 
 /**
- * This function tests vulnerablility for handling very long checksum strings in the tar header.
+ * Same as "test_size1" but this time with 2 files with data, try every char value for every position AND reset to '0' when passing
+ * to the next index to ensure that we can test the case with short size as '00000000001'
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -161,7 +162,7 @@ void test_chksum_field_overflow(char *argv[], int fd, struct tar_t *header);
 void test_medium_size1(char *argv[], int fd, struct tar_t *header);
 
 /**
- * Test remplacing the content of a ".txt" file with (possible) non-ASCII character
+ * Test an archive with 2 files by writing with (possible) non-ASCII character to both of them.
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -170,7 +171,8 @@ void test_medium_size1(char *argv[], int fd, struct tar_t *header);
 void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header);
 
 /**
- *
+ * Test an archive with a ".txt" file and a simbolic link that point to itself first,
+ * and then test with every char value in the field linkname for that simbolic link.
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -179,9 +181,9 @@ void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header);
 void test_linked_linkname(char *argv[], int fd, struct tar_t *header);
 
 /**
- * Test an archive with a folder who has a size non-null with some data
+ * Test an archive with a folder who has a non-null size with some data
  * and
- * Test by wrinting data in the end pading field
+ * Test by writing data in the end padding field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
