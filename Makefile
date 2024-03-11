@@ -14,7 +14,7 @@ all: $(PROG)
 	$(CC) -c $(CFLAGS) src/test.c
 
 $(PROG): $(OBJS)
-	$(CC) -o $@ $^ -lm
+	$(CC) -o $@ $^
 
 
 

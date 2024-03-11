@@ -12,7 +12,7 @@
  * @param header pointer to a header structure
  *
  */
-void test_name1(char *argv[], int fd, struct tar_t *header);
+void test_name1(char* extractor, int fd, struct tar_t *header);
 
 /**
  *
@@ -21,7 +21,7 @@ void test_name1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_name2(char *argv[], int fd, struct tar_t *header);
+void test_name2(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the mode field
@@ -30,7 +30,7 @@ void test_name2(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_mode1(char *argv[], int fd, struct tar_t *header);
+void test_mode1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the uid field
@@ -39,7 +39,7 @@ void test_mode1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_uid1(char *argv[], int fd, struct tar_t *header);
+void test_uid1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the gid field
@@ -48,7 +48,7 @@ void test_uid1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_gid1(char *argv[], int fd, struct tar_t *header);
+void test_gid1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the size field
@@ -57,7 +57,7 @@ void test_gid1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_size1(char *argv[], int fd, struct tar_t *header);
+void test_size1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the mtime field
@@ -66,7 +66,7 @@ void test_size1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_mtime1(char *argv[], int fd, struct tar_t *header);
+void test_mtime1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the typeflag field
@@ -75,7 +75,7 @@ void test_mtime1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_typeflag1(char *argv[], int fd, struct tar_t *header);
+void test_typeflag1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the linkname field
@@ -84,7 +84,7 @@ void test_typeflag1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_linkname1(char *argv[], int fd, struct tar_t *header);
+void test_linkname1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the magic field
@@ -93,7 +93,7 @@ void test_linkname1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_magic1(char *argv[], int fd, struct tar_t *header);
+void test_magic1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the version field
@@ -102,7 +102,7 @@ void test_magic1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_version1(char *argv[], int fd, struct tar_t *header);
+void test_version1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the uname field
@@ -111,7 +111,7 @@ void test_version1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_uname1(char *argv[], int fd, struct tar_t *header);
+void test_uname1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test every possible char for every possible position for the gname field
@@ -120,7 +120,7 @@ void test_uname1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_gname1(char *argv[], int fd, struct tar_t *header);
+void test_gname1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test an empty archive
@@ -129,7 +129,7 @@ void test_gname1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_0byte(char *argv[], int fd, struct tar_t *header);
+void test_0byte(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test vulnerability related to handling large checksum values in the tar header.
@@ -140,7 +140,7 @@ void test_0byte(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header);
+void test_chksum_MAX_multiple(char* extractor, int fd, struct tar_t *header);
 
 /**
  * This function tests vulnerability for handling very long checksum strings in the tar header.
@@ -149,7 +149,7 @@ void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_chksum_field_overflow(char *argv[], int fd, struct tar_t *header);
+void test_chksum_field_overflow(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Same as "test_size1" but this time with 2 files with data, try every char value for every position AND reset to '0' when passing
@@ -159,7 +159,7 @@ void test_chksum_field_overflow(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_medium_size1(char *argv[], int fd, struct tar_t *header);
+void test_medium_size1(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test an archive with 2 files by writing with (possible) non-ASCII character to both of them.
@@ -168,7 +168,7 @@ void test_medium_size1(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header);
+void test_medium_nonASCII_data(char* extractor, int fd,  struct tar_t *header);
 
 /**
  * Test an archive with a ".txt" file and a simbolic link that point to itself first,
@@ -178,7 +178,7 @@ void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_linked_linkname(char *argv[], int fd, struct tar_t *header);
+void test_linked_linkname(char* extractor, int fd, struct tar_t *header);
 
 /**
  * Test an archive with a folder who has a non-null size with some data
@@ -189,7 +189,7 @@ void test_linked_linkname(char *argv[], int fd, struct tar_t *header);
  * @param header pointer to a header structure
  *
  */
-void test_dir_adding_data(char* argv[], int fd, struct tar_t *header);
+void test_dir_adding_data(char* extractor, int fd, struct tar_t *header);
 
 
 #endif //SRC_TEST_H

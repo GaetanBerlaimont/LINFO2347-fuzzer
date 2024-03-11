@@ -5,12 +5,13 @@
 #include "util.h"
 
 
-int launch(char* argv[]){
+int launch(char* extractor){
     int rv = 0;
     char cmd[51];
-    strncpy(cmd, argv[1], 25);
+    strncpy(cmd, extractor, 25);
     cmd[26] = '\0';
-    strncat(cmd, " archives/archive.tar", 25);
+    char file_name[20] = " arc/archive.tar";
+    strncat(cmd, file_name, 25);
     char buf[33];
     FILE *fp;
 
@@ -62,22 +63,22 @@ int setup(int fd, struct tar_t *header, int which_tar){
         printf("Command not found\n");
         return -1;
     }
-    remove("archives/archive.tar");
+    remove("arc/archive.tar");
     switch (which_tar){
         case BASIC:
-            system("cp archives/archive_basic.tar archives/archive.tar");
+            system("cp arc/archive_basic.tar arc/archive.tar");
             break;
         case MEDIUM:
-            system("cp archives/archive_medium.tar archives/archive.tar");
+            system("cp arc/archive_medium.tar arc/archive.tar");
             break;
         case LINKED:
-            system("cp archives/archive_linked.tar archives/archive.tar");
+            system("cp arc/archive_linked.tar arc/archive.tar");
             break;
         default : 
             printf("error wrong input\n");
             return -1;
     }
-    if ((fd = open("archives/archive.tar", O_RDWR, O_SYNC)) == -1) {
+    if ((fd = open("arc/archive.tar", O_RDWR, O_SYNC)) == -1) {
         printf("Error opening file!\n");
         return -1;
     }
@@ -93,7 +94,7 @@ int setup(int fd, struct tar_t *header, int which_tar){
     return 0;
 }
 
-int fillHeader(char* argv[], int fd, struct tar_t *header, int which_elem, int size, int reset){
+int fillHeader(char* extractor, int fd, struct tar_t *header, int which_elem, int size, int reset){
     int ret;
     char * H;
     switch (which_elem) {
@@ -146,7 +147,7 @@ int fillHeader(char* argv[], int fd, struct tar_t *header, int which_elem, int s
                 printf("Error writing file!\n");
                 return -1;
             }
-            ret = launch(argv);// we found a successful crash
+            ret = launch(extractor);// we found a successful crash
             if (ret == 1){
                 return 1;
             }

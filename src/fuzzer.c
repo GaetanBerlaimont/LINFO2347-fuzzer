@@ -13,7 +13,7 @@
  * @param argv: the argument passed from the main fct
  * @return 0 if nothing wrong happened, -1 otherwise.
  */
-int basic(char* argv[]);
+int basic(char* extractor);
 
 /**
  * Perform test based on the archive "archive_medium.tar" which contain 2 ."txt" files with data.
@@ -21,7 +21,7 @@ int basic(char* argv[]);
  * @param argv: the argument passed from the main fct
  * @return 0 if nothing wrong happened, -1 otherwise.
  */
-int medium(char* argv[]);
+int medium(char* extractor);
 
 /**
  * Perform test based on the archive "archive_linked.tar" which contain a ."txt" file with data and a simbolic link for that file.
@@ -30,7 +30,7 @@ int medium(char* argv[]);
  * @param argv: the argument passed from the main fct
  * @return 0 if nothing wrong happened, -1 otherwise.
  */
-int linked(char *argv[]);
+int linked(char* extractor);
 
 /**
  * Perform test based on the archive "archive_dir.tar" which contain only an empty folder.
@@ -39,29 +39,29 @@ int linked(char *argv[]);
  * @param argv: the argument passed from the main fct
  * @return 0 if nothing wrong happened, -1 otherwise.
  */
-int dir(char *argv[]);
+int dir(char* extractor);
 
 
 int main(int argc, char* argv[]) {
     if (argc < 2)
         return -1;
 
-    basic(argv);
-    medium(argv);
-    linked(argv);
-    dir(argv);
+    basic(argv[1]);
+    medium(argv[1]);
+    linked(argv[1]);
+    dir(argv[1]);
 }
 
 
-int basic(char* argv[]){
+int basic(char* extractor){
     //initialisation variable
     int tar;// folder
     struct tar_t *header;
     header = (struct tar_t *) malloc(sizeof(struct tar_t));
 
     //create a copy of the archive and perform test on the copied one
-    system("cp archives/archive_basic.tar archives/archive.tar");
-    if ((tar = open("archives/archive.tar", O_RDWR, O_SYNC)) == -1) {
+    system("cp arc/archive_basic.tar arc/archive.tar");
+    if ((tar = open("arc/archive.tar", O_RDWR, O_SYNC)) == -1) {
         printf("Error opening file!\n");
         return -1;
     }
@@ -73,36 +73,36 @@ int basic(char* argv[]){
     }
 
 
-    test_name1(argv, tar, header);
-    test_name2(argv, tar, header);
+    test_name1(extractor, tar, header);
+    test_name2(extractor, tar, header);
 
-    test_mode1(argv, tar, header);
+    test_mode1(extractor, tar, header);
 
-    test_uid1(argv, tar, header);
+    test_uid1(extractor, tar, header);
 
-    test_gid1(argv, tar, header);
+    test_gid1(extractor, tar, header);
 
-    test_size1(argv, tar, header);
+    test_size1(extractor, tar, header);
 
-    test_mtime1(argv, tar, header);
+    test_mtime1(extractor, tar, header);
 
-    test_typeflag1(argv, tar, header);
+    test_typeflag1(extractor, tar, header);
 
-    test_linkname1(argv, tar, header);
+    test_linkname1(extractor, tar, header);
 
-    test_magic1(argv, tar, header);
+    test_magic1(extractor, tar, header);
 
-    test_version1(argv, tar, header);
+    test_version1(extractor, tar, header);
 
-    test_uname1(argv, tar, header);
+    test_uname1(extractor, tar, header);
 
-    test_gname1(argv, tar, header);
+    test_gname1(extractor, tar, header);
 
-    test_0byte(argv, tar, header);
+    test_0byte(extractor, tar, header);
 
-    test_chksum_MAX_multiple(argv, tar, header);
+    test_chksum_MAX_multiple(extractor, tar, header);
 
-    test_chksum_field_overflow(argv, tar, header);
+    test_chksum_field_overflow(extractor, tar, header);
 
 
     finally:
@@ -116,15 +116,15 @@ int basic(char* argv[]){
 }
 
 
-int medium(char* argv[]){
+int medium(char* extractor){
     //initialisation variable
     int tar;// folder
     struct tar_t *header;
     header = (struct tar_t *) malloc(sizeof(struct tar_t));
 
     //create a copy of the archive and perform test on the copied one
-    system("cp archives/archive_medium.tar archives/archive.tar");
-    if ((tar = open("archives/archive.tar", O_RDWR, O_SYNC)) == -1) {
+    system("cp arc/archive_medium.tar arc/archive.tar");
+    if ((tar = open("arc/archive.tar", O_RDWR, O_SYNC)) == -1) {
         printf("Error opening file!\n");
         return -1;
     }
@@ -135,9 +135,9 @@ int medium(char* argv[]){
         goto finally;
     }
 
-    test_medium_size1(argv, tar, header);
+    test_medium_size1(extractor, tar, header);
 
-    test_medium_nonASCII_data(argv, tar, header);
+    test_medium_nonASCII_data(extractor, tar, header);
 
     finally:
     if(close(tar) == -1) {
@@ -148,15 +148,15 @@ int medium(char* argv[]){
     return 0;
 }
 
-int linked(char *argv[]){
+int linked(char* extractor){
     //initialisation variable
     int tar;// folder
     struct tar_t *header;
     header = (struct tar_t *) malloc(sizeof(struct tar_t));
 
     //create a copy of the archive and perform test on the copied one
-    system("cp archives/archive_linked.tar archives/archive.tar");
-    if ((tar = open("archives/archive.tar", O_RDWR, O_SYNC)) == -1) {
+    system("cp arc/archive_linked.tar arc/archive.tar");
+    if ((tar = open("arc/archive.tar", O_RDWR, O_SYNC)) == -1) {
         printf("Error opening file!\n");
         return -1;
     }
@@ -167,7 +167,7 @@ int linked(char *argv[]){
         goto finally;
     }
 
-    test_linked_linkname(argv, tar, header);
+    test_linked_linkname(extractor, tar, header);
 
     finally:
     if(close(tar) == -1) {
@@ -179,15 +179,15 @@ int linked(char *argv[]){
 }
 
 
-int dir(char *argv[]){
+int dir(char* extractor){
     //initialisation variable
     int tar;// folder
     struct tar_t *header;
     header = (struct tar_t *) malloc(sizeof(struct tar_t));
 
     //create a copy of the archive and perform test on the copied one
-    system("cp archives/archive_dir.tar archives/archive.tar");
-    if ((tar = open("archives/archive.tar", O_RDWR, O_SYNC)) == -1) {
+    system("cp arc/archive_dir.tar arc/archive.tar");
+    if ((tar = open("arc/archive.tar", O_RDWR, O_SYNC)) == -1) {
         printf("Error opening file!\n");
         return -1;
     }
@@ -198,7 +198,7 @@ int dir(char *argv[]){
         goto finally;
     }
 
-    test_dir_adding_data(argv, tar, header);
+    test_dir_adding_data(extractor, tar, header);
 
     finally:
     if(close(tar) == -1) {

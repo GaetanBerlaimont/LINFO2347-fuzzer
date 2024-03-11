@@ -1,7 +1,7 @@
 #include "util.h"
 
 
-void test_name1(char *argv[], int fd, struct tar_t *header) {
+void test_name1(char* extractor, int fd, struct tar_t *header) {
     setup(fd, header,BASIC);
 
     for (int j = 0; j < 100; j++) {
@@ -18,12 +18,12 @@ void test_name1(char *argv[], int fd, struct tar_t *header) {
                 return;
             }
 
-            int ret = launch(argv);
+            int ret = launch(extractor);
 
             //handle case if we found a succesfull attack
             if (ret==1) {
                 printf("duplicate header name bugged = %s\n", header->name);
-                system("cp archives/archive.tar success_name_duplicateHeader.tar");
+                system("cp arc/archive.tar success_dupl_header.tar");
                 return;
             }
             else {
@@ -34,7 +34,7 @@ void test_name1(char *argv[], int fd, struct tar_t *header) {
 }
 
 
-void test_name2(char *argv[], int fd, struct tar_t *header) {
+void test_name2(char* extractor, int fd, struct tar_t *header) {
 
     setup(fd,header,BASIC);
 
@@ -52,12 +52,12 @@ void test_name2(char *argv[], int fd, struct tar_t *header) {
                 return;
             }
 
-            int ret = launch(argv);
+            int ret = launch(extractor);
 
             //handle case if we found a succesfull attack
             if (ret==1) {
                 printf("name bugged = %s\n",header->name);
-                system("cp archives/archive.tar success_name.tar");
+                system("cp arc/archive.tar success_name.tar");
                 return;
             }
             else {
@@ -68,69 +68,69 @@ void test_name2(char *argv[], int fd, struct tar_t *header) {
 }
 
 
-void test_mode1(char *argv[], int fd, struct tar_t *header) {
+void test_mode1(char* extractor, int fd, struct tar_t *header) {
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,MODE,8,0);
+    int ret = fillHeader(extractor,fd,header,MODE,8,0);
 
     if (ret == 1){
         printf("mode bugged : %s\n",header->mode);
-        system("cp archives/archive.tar success_mode.tar");
+        system("cp arc/archive.tar success_mode.tar");
     }
 }
 
 
-void test_uid1(char *argv[], int fd, struct tar_t *header) {
+void test_uid1(char* extractor, int fd, struct tar_t *header) {
 
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,UID,8,0);
+    int ret = fillHeader(extractor,fd,header,UID,8,0);
 
     if(ret == 1){
         printf("uid bugged : %s\n",header->uid);
-        system("cp archives/archive.tar success_uid.tar");
+        system("cp arc/archive.tar success_uid.tar");
     }
 }
 
 
-void test_gid1(char *argv[], int fd, struct tar_t *header) {
+void test_gid1(char* extractor, int fd, struct tar_t *header) {
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,GID,8,0);
+    int ret = fillHeader(extractor,fd,header,GID,8,0);
 
     if(ret == 1){
         printf("gid bugged : %s\n",header->gid);
-        system("cp archives/archive.tar success_gid.tar");
+        system("cp arc/archive.tar success_gid.tar");
     }
 }
 
 
-void test_size1(char *argv[], int fd, struct tar_t *header) {
+void test_size1(char* extractor, int fd, struct tar_t *header) {
 
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,SIZE,12,0);
+    int ret = fillHeader(extractor,fd,header,SIZE,12,0);
 
     if(ret == 1){
         printf("size bugged : %s\n",header->size);
-        system("cp archives/archive.tar success_size.tar");
+        system("cp arc/archive.tar success_size.tar");
     }
 }
 
-void test_mtime1(char *argv[], int fd, struct tar_t *header) {
+void test_mtime1(char* extractor, int fd, struct tar_t *header) {
 
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,MTIME,12,0);
+    int ret = fillHeader(extractor,fd,header,MTIME,12,0);
 
     if(ret == 1){
         printf("mtime bugged : %s\n",header->mtime);
-        system("cp archives/archive.tar success_mtime.tar");
+        system("cp arc/archive.tar success_mtime.tar");
     }
 }
 
 
-void test_typeflag1(char *argv[], int fd, struct tar_t *header) {
+void test_typeflag1(char* extractor, int fd, struct tar_t *header) {
 
     setup(fd,header,BASIC);
 
@@ -144,75 +144,75 @@ void test_typeflag1(char *argv[], int fd, struct tar_t *header) {
             return;
         }
 
-        int ret = launch(argv);
+        int ret = launch(extractor);
 
         //handling case we found succes crash
         if (ret == 1){
             printf("typeflag bugged : %c\n",header->typeflag);
-            system("cp archives/archive.tar success_typeflag.tar");
+            system("cp arc/archive.tar success_typeflag.tar");
             return;
         }
     }
 }
 
-void test_linkname1(char *argv[], int fd, struct tar_t *header) {
+void test_linkname1(char* extractor, int fd, struct tar_t *header) {
 
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,LINKNAME,100,0);
+    int ret = fillHeader(extractor,fd,header,LINKNAME,100,0);
 
     if(ret == 1){
         printf("linkname bugged : %s\n",header->linkname);
-        system("cp archives/archive.tar success_linkname.tar");
+        system("cp arc/archive.tar success_linkname.tar");
     }
 }
 
-void test_magic1(char *argv[], int fd, struct tar_t *header) {
+void test_magic1(char* extractor, int fd, struct tar_t *header) {
 
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,MAGIC,6,0);
+    int ret = fillHeader(extractor,fd,header,MAGIC,6,0);
 
     if(ret == 1){
         printf("magic bugged : %s\n",header->magic);
-        system("cp archives/archive.tar success_magic.tar");
+        system("cp arc/archive.tar success_magic.tar");
     }
 }
 
-void test_version1(char *argv[], int fd, struct tar_t *header) {
+void test_version1(char* extractor, int fd, struct tar_t *header) {
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,VERSION,2,0);
+    int ret = fillHeader(extractor,fd,header,VERSION,2,0);
 
     if(ret == 1){
         printf("version bugged : %s\n",header->version);
-        system("cp archives/archive.tar success_version.tar");
+        system("cp arc/archive.tar success_version.tar");
     }
 }
 
-void test_uname1(char *argv[], int fd, struct tar_t *header) {
+void test_uname1(char* extractor, int fd, struct tar_t *header) {
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,UNAME,32,0);
+    int ret = fillHeader(extractor,fd,header,UNAME,32,0);
 
     if(ret == 1){
         printf("uname bugged : %s\n",header->uname);
-        system("cp archives/archive.tar success_uname.tar");
+        system("cp arc/archive.tar success_uname.tar");
     }
 }
 
-void test_gname1(char *argv[], int fd, struct tar_t *header) {
+void test_gname1(char* extractor, int fd, struct tar_t *header) {
     setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,fd,header,GNAME,32,0);
+    int ret = fillHeader(extractor,fd,header,GNAME,32,0);
 
     if(ret == 1){
         printf("gname bugged : %s\n",header->gname);
-        system("cp archives/archive.tar success_gname.tar");
+        system("cp arc/archive.tar success_gname.tar");
     }
 }
 
-void test_0byte(char *argv[], int fd, struct tar_t *header) {
+void test_0byte(char* extractor, int fd, struct tar_t *header) {
 
     setup(fd,header,BASIC);
     char tab[512];
@@ -223,15 +223,15 @@ void test_0byte(char *argv[], int fd, struct tar_t *header) {
     lseek(fd,0,SEEK_SET);
     write(fd,tab,512);
 
-    int ret = launch(argv);
+    int ret = launch(extractor);
     if(ret == 1){
         printf("header with all 0 bugged ");
-        system("cp archives/archive.tar success_empty.tar");
+        system("cp arc/archive.tar success_empty.tar");
     }
 }
 
 
-void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header)
+void test_chksum_MAX_multiple(char* extractor, int fd, struct tar_t *header)
 {
     setup(fd, header,BASIC);
 
@@ -244,12 +244,12 @@ void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header)
         return;
     }
 
-    int ret = launch(argv);
+    int ret = launch(extractor);
 
     //handle case if we found a succesfull attack
     if(ret==1){
         printf("cheksum bugged = %s\n", header->chksum);
-        system("cp archives/archive.tar archives/success_cheksum.tar");
+        system("cp arc/archive.tar success_cheksum1.tar");
         return;
     }
 
@@ -268,11 +268,11 @@ void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header)
             return;
         }
 
-        ret = launch(argv);
+        ret = launch(extractor);
 
         if (ret == 1) {
             printf("cheksum bugged = %s\n", header->chksum);
-            system("cp archives/archive.tar success_cheksum.tar");
+            system("cp arc/archive.tar success_cheksum2.tar");
             return;
         }
         counter++;
@@ -281,7 +281,7 @@ void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header)
 
 
 
-void test_chksum_field_overflow(char *argv[], int fd, struct tar_t *header)
+void test_chksum_field_overflow(char* extractor, int fd, struct tar_t *header)
 {
     setup(fd, header,BASIC);
 
@@ -305,25 +305,25 @@ void test_chksum_field_overflow(char *argv[], int fd, struct tar_t *header)
         }
 
 
-        ret = launch(argv);
+        ret = launch(extractor);
 
         if(ret==1){
             printf("cheksum bugged = %s\n", header->chksum);
-            system("cp archives/archive.tar success_cheksum.tar");
+            system("cp arc/archive.tar success_cheksum.tar");
             return;
         }
     }
 }
 
 
-void test_medium_size1(char *argv[], int fd, struct tar_t *header) {
+void test_medium_size1(char* extractor, int fd, struct tar_t *header) {
 //---------------modify first header-------------------
 
-    int ret = fillHeader( argv, fd, header, SIZE, 12,1);
+    int ret = fillHeader( extractor, fd, header, SIZE, 12,1);
 
     if(ret == 1){
         printf("size bugged : %s\n",header->size);
-        system("cp archives/archive.tar success_size.tar");
+        system("cp arc/archive.tar success_size.tar");
     }
 
 //---------------modify second header-----------------
@@ -343,14 +343,14 @@ void test_medium_size1(char *argv[], int fd, struct tar_t *header) {
 
     printf("second header name : %s\n",header->name);
 
-    ret = fillHeader( argv, fd, header, SIZE, 12, 1);
+    ret = fillHeader( extractor, fd, header, SIZE, 12, 1);
     if(ret == 1){
         printf("size bugged : %s\n",header->size);
-        system("cp archives/archive.tar success_size.tar");
+        system("cp arc/archive.tar success_size.tar");
     }
 }
 
-void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header){
+void test_medium_nonASCII_data(char* extractor, int fd,  struct tar_t *header){
 //------------first test on first file----------
     int ret;
     setup(fd, header, MEDIUM);
@@ -368,10 +368,10 @@ void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header){
         return;
     }
     
-    ret = launch(argv);
+    ret = launch(extractor);
     if(ret == 1){
         printf("non ACSII content bugged \n");
-        system("cp archives/archive.tar success_nonASCII_content.tar");
+        system("cp arc/archive.tar success_nonASCII_content.tar");
     }
 
 
@@ -391,19 +391,19 @@ void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header){
         return;
     }
     
-    ret = launch(argv);
+    ret = launch(extractor);
     if(ret == 1){
         printf("non ACSII content bugged \n");
-        system("cp archives/archive.tar success_nonASCII_content.tar");
+        system("cp arc/archive.tar success_nonASCII_content.tar");
     }
 }
 
 
 
-void test_linked_linkname(char *argv[], int fd, struct tar_t *header) {
+void test_linked_linkname(char* extractor, int fd, struct tar_t *header) {
 //---------------First test------------------------
     //ensure that we test the case where linkname=name
-    int ret = fillHeader(argv,fd,header,LINKNAME,100,0);;
+    int ret = fillHeader(extractor,fd,header,LINKNAME,100,0);;
 
     sprintf(header->linkname, "%s", header->name);
     calculate_checksum(header);
@@ -414,22 +414,22 @@ void test_linked_linkname(char *argv[], int fd, struct tar_t *header) {
         return;
     }
 
-    ret = launch(argv);
+    ret = launch(extractor);
 
     if(ret == 1){
         printf("linkname bugged : %s\n",header->linkname);
-        system("cp archives/archive.tar success_linkname.tar");
+        system("cp arc/archive.tar success_linkname.tar");
     }
 //---------------Other test------------------------
-    ret = fillHeader(argv,fd,header,LINKNAME,100,0);
+    ret = fillHeader(extractor,fd,header,LINKNAME,100,0);
 
     if(ret == 1){
         printf("linkname bugged : %s\n",header->linkname);
-        system("cp archives/archive.tar success_linkname.tar");
+        system("cp arc/archive.tar success_linkname.tar");
     }
 }
 
-void test_dir_adding_data(char* argv[], int fd, struct tar_t *header){
+void test_dir_adding_data(char* extractor, int fd, struct tar_t *header){
     int ret =0;
 
     //set size to 500
@@ -459,11 +459,11 @@ void test_dir_adding_data(char* argv[], int fd, struct tar_t *header){
         return;
     }
 
-    ret = launch(argv);
+    ret = launch(extractor);
 
     if (ret == 1) {
         printf("dir bugged\n");
-        system("cp archives/archive.tar success_size+data.tar");
+        system("cp arc/archive.tar success_size_data.tar");
     }
 
 
@@ -477,11 +477,11 @@ void test_dir_adding_data(char* argv[], int fd, struct tar_t *header){
         }
     }
 
-    ret = launch(argv);
+    ret = launch(extractor);
 
     if (ret == 1) {
         printf("dir bugged\n");
-        system("cp archives/archive.tar success_padding_overwriting.tar");
+        system("cp arc/archive.tar success_padding_overwrite.tar");
         return;
     }
     

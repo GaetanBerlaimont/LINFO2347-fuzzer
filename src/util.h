@@ -60,7 +60,7 @@ struct tar_t
  * BONUS (for fun, no additional marks) without modifying this code,
  * compile it and use the executable to restart our computer.
  */
-int launch(char* argv[]);
+int launch(char* extractor);
 
 /**
  * Computes the checksum for a tar header and encode it on the header
@@ -96,6 +96,6 @@ int setup(int fd, struct tar_t *header, int which_tar);
  *          1 if a crash for the extractor is found.
  *
  */
-int fillHeader( char* argv[], int fd, struct tar_t *header, int which_elem, int size, int reset);
+int fillHeader(char* extractor, int fd, struct tar_t *header, int which_elem, int size, int reset);
 
 #endif
