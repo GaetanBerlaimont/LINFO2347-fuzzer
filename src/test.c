@@ -1,13 +1,8 @@
 #include "util.h"
 
-/*|-----------------------------------------------------------------|*/
-/*|                TEST with name (duplicate header)                |*/
-/*|-----------------------------------------------------------------|*/
-// This test checks if the extractor can handle large length values and
-// if it crashes or shows unexpected behavior when processing such values
-// in the len field. It tests this with a set of random large length values.
-void test_name1(char *argv[], int tar, struct tar_t *header) {
-    setup(tar, header,BASIC);
+
+void test_name1(char *argv[], int fd, struct tar_t *header) {
+    setup(fd, header,BASIC);
 
     for (int j = 0; j < 100; j++) {
         //range of all non ASCII char [127,283]
@@ -17,8 +12,8 @@ void test_name1(char *argv[], int tar, struct tar_t *header) {
             calculate_checksum(header);
 
             //write new name but after the current fd pointer -> we duplicate the first header
-            //lseek(tar,0,SEEK_SET);
-            if (write(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+            //lseek(fd,0,SEEK_SET);
+            if (write(fd, (void*) header, sizeof(struct tar_t)) == -1) {
                 printf("Error writing file!\n");
                 return;
             }
@@ -38,12 +33,10 @@ void test_name1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with name                         |*/
-/*|-----------------------------------------------------------------|*/
-void test_name2(char *argv[], int tar, struct tar_t *header) {
 
-    setup(tar,header,BASIC);
+void test_name2(char *argv[], int fd, struct tar_t *header) {
+
+    setup(fd,header,BASIC);
 
     for (int j = 0; j < 100 ; j++){//replace 1 by 100
         //range of all non ASCII char [127,283]
@@ -53,8 +46,8 @@ void test_name2(char *argv[], int tar, struct tar_t *header) {
             calculate_checksum(header);
 
             //this time we set the fd pointer back to the begining of the archive
-            lseek(tar,0,SEEK_SET);
-            if (write(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+            lseek(fd,0,SEEK_SET);
+            if (write(fd, (void*) header, sizeof(struct tar_t)) == -1) {
                 printf("Error writing file!\n");
                 return;
             }
@@ -74,13 +67,11 @@ void test_name2(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with mode                         |*/
-/*|-----------------------------------------------------------------|*/
-void test_mode1(char *argv[], int tar, struct tar_t *header) {
-    setup(tar,header,BASIC);
 
-    int ret = fillHeader(argv,tar,header,MODE,8,0);
+void test_mode1(char *argv[], int fd, struct tar_t *header) {
+    setup(fd,header,BASIC);
+
+    int ret = fillHeader(argv,fd,header,MODE,8,0);
 
     if (ret == 1){
         printf("mode bugged : %s\n",header->mode);
@@ -88,14 +79,12 @@ void test_mode1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with uid                          |*/
-/*|-----------------------------------------------------------------|*/
-void test_uid1(char *argv[], int tar, struct tar_t *header) {
 
-    setup(tar,header,BASIC);
+void test_uid1(char *argv[], int fd, struct tar_t *header) {
 
-    int ret = fillHeader(argv,tar,header,UID,8,0);
+    setup(fd,header,BASIC);
+
+    int ret = fillHeader(argv,fd,header,UID,8,0);
 
     if(ret == 1){
         printf("uid bugged : %s\n",header->uid);
@@ -103,13 +92,11 @@ void test_uid1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with gid                          |*/
-/*|-----------------------------------------------------------------|*/
-void test_gid1(char *argv[], int tar, struct tar_t *header) {
-    setup(tar,header,BASIC);
 
-    int ret = fillHeader(argv,tar,header,GID,8,0);
+void test_gid1(char *argv[], int fd, struct tar_t *header) {
+    setup(fd,header,BASIC);
+
+    int ret = fillHeader(argv,fd,header,GID,8,0);
 
     if(ret == 1){
         printf("gid bugged : %s\n",header->gid);
@@ -117,14 +104,12 @@ void test_gid1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with size                         |*/
-/*|-----------------------------------------------------------------|*/
-void test_size1(char *argv[], int tar, struct tar_t *header) {
 
-    setup(tar,header,BASIC);
+void test_size1(char *argv[], int fd, struct tar_t *header) {
 
-    int ret = fillHeader(argv,tar,header,SIZE,12,0);
+    setup(fd,header,BASIC);
+
+    int ret = fillHeader(argv,fd,header,SIZE,12,0);
 
     if(ret == 1){
         printf("size bugged : %s\n",header->size);
@@ -132,14 +117,11 @@ void test_size1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with mtime                        |*/
-/*|-----------------------------------------------------------------|*/
-void test_mtime1(char *argv[], int tar, struct tar_t *header) {
+void test_mtime1(char *argv[], int fd, struct tar_t *header) {
 
-    setup(tar,header,BASIC);
+    setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,tar,header,MTIME,12,0);
+    int ret = fillHeader(argv,fd,header,MTIME,12,0);
 
     if(ret == 1){
         printf("mtime bugged : %s\n",header->mtime);
@@ -147,19 +129,17 @@ void test_mtime1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                        TEST with typeflag                       |*/
-/*|-----------------------------------------------------------------|*/
-void test_typeflag1(char *argv[], int tar, struct tar_t *header) {
 
-    setup(tar,header,BASIC);
+void test_typeflag1(char *argv[], int fd, struct tar_t *header) {
+
+    setup(fd,header,BASIC);
 
     for (char val = -128; val < 127; val++) {
         header->typeflag = val;
 
         calculate_checksum(header);
-        lseek(tar,0,SEEK_SET);
-        if (write(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+        lseek(fd,0,SEEK_SET);
+        if (write(fd, (void*) header, sizeof(struct tar_t)) == -1) {
             printf("Error writing file!\n");
             return;
         }
@@ -175,14 +155,11 @@ void test_typeflag1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                        TEST with linkname                       |*/
-/*|-----------------------------------------------------------------|*/
-void test_linkname1(char *argv[], int tar, struct tar_t *header) {
+void test_linkname1(char *argv[], int fd, struct tar_t *header) {
 
-    setup(tar,header,BASIC);
+    setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,tar,header,LINKNAME,100,0);
+    int ret = fillHeader(argv,fd,header,LINKNAME,100,0);
 
     if(ret == 1){
         printf("linkname bugged : %s\n",header->linkname);
@@ -190,14 +167,11 @@ void test_linkname1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with magic                        |*/
-/*|-----------------------------------------------------------------|*/
-void test_magic1(char *argv[], int tar, struct tar_t *header) {
+void test_magic1(char *argv[], int fd, struct tar_t *header) {
 
-    setup(tar,header,BASIC);
+    setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,tar,header,MAGIC,6,0);
+    int ret = fillHeader(argv,fd,header,MAGIC,6,0);
 
     if(ret == 1){
         printf("magic bugged : %s\n",header->magic);
@@ -205,13 +179,10 @@ void test_magic1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                         TEST with version                       |*/
-/*|-----------------------------------------------------------------|*/
-void test_version1(char *argv[], int tar, struct tar_t *header) {
-    setup(tar,header,BASIC);
+void test_version1(char *argv[], int fd, struct tar_t *header) {
+    setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,tar,header,VERSION,2,0);
+    int ret = fillHeader(argv,fd,header,VERSION,2,0);
 
     if(ret == 1){
         printf("version bugged : %s\n",header->version);
@@ -219,13 +190,10 @@ void test_version1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with uname                        |*/
-/*|-----------------------------------------------------------------|*/
-void test_uname1(char *argv[], int tar, struct tar_t *header) {
-    setup(tar,header,BASIC);
+void test_uname1(char *argv[], int fd, struct tar_t *header) {
+    setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,tar,header,UNAME,32,0);
+    int ret = fillHeader(argv,fd,header,UNAME,32,0);
 
     if(ret == 1){
         printf("uname bugged : %s\n",header->uname);
@@ -233,13 +201,10 @@ void test_uname1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with gname                        |*/
-/*|-----------------------------------------------------------------|*/
-void test_gname1(char *argv[], int tar, struct tar_t *header) {
-    setup(tar,header,BASIC);
+void test_gname1(char *argv[], int fd, struct tar_t *header) {
+    setup(fd,header,BASIC);
 
-    int ret = fillHeader(argv,tar,header,GNAME,32,0);
+    int ret = fillHeader(argv,fd,header,GNAME,32,0);
 
     if(ret == 1){
         printf("gname bugged : %s\n",header->gname);
@@ -247,19 +212,16 @@ void test_gname1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                       TEST with all byte 0                      |*/
-/*|-----------------------------------------------------------------|*/
-void test_0byte(char *argv[], int tar, struct tar_t *header) {
+void test_0byte(char *argv[], int fd, struct tar_t *header) {
 
-    setup(tar,header,BASIC);
+    setup(fd,header,BASIC);
     char tab[512];
     for (int i = 0; i < 512; i++)
     {
         tab[i] = '\0';
     }
-    lseek(tar,0,SEEK_SET);
-    write(tar,tab,512);
+    lseek(fd,0,SEEK_SET);
+    write(fd,tab,512);
 
     int ret = launch(argv);
     if(ret == 1){
@@ -268,18 +230,16 @@ void test_0byte(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
-// Test vulnerablility related to handling large checksum values in the tar header.
-// Generates random octal numbers within maximum range
-// for a 7-character checksum and calls chksum_single_test with each value.
-void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
+
+void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header)
 {
-    setup(tar, header,BASIC);
+    setup(fd, header,BASIC);
 
 //------first we ensure that the first case is the maximum possible value--------------
     sprintf(header->chksum,"%o",2097151);//'7777777'
 
-    lseek(tar,0,SEEK_SET);
-    if (write(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+    lseek(fd,0,SEEK_SET);
+    if (write(fd, (void*) header, sizeof(struct tar_t)) == -1) {
         printf("Error writing file!\n");
         return;
     }
@@ -302,8 +262,8 @@ void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
 
         sprintf(header->chksum, "%o", rand_int);
 
-        lseek(tar, 0, SEEK_SET);
-        if (write(tar, (void *) header, sizeof(struct tar_t)) == -1) {
+        lseek(fd, 0, SEEK_SET);
+        if (write(fd, (void *) header, sizeof(struct tar_t)) == -1) {
             printf("Error writing file!\n");
             return;
         }
@@ -320,10 +280,10 @@ void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
 }
 
 
-// This function tests vulnerablility for handling very long checksum strings in the tar header.
-void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header)
+
+void test_chksum_field_overflow(char *argv[], int fd, struct tar_t *header)
 {
-    setup(tar, header,BASIC);
+    setup(fd, header,BASIC);
 
     int ret;
 
@@ -338,8 +298,8 @@ void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header)
         header->chksum[i-1] = '\0';
 
 
-        lseek(tar,0,SEEK_SET);
-        if (write(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+        lseek(fd,0,SEEK_SET);
+        if (write(fd, (void*) header, sizeof(struct tar_t)) == -1) {
             printf("Error writing file!\n");
             return;
         }
@@ -355,13 +315,11 @@ void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header)
     }
 }
 
-/*|-----------------------------------------------------------------|*/
-/*|                          TEST with size                         |*/
-/*|-----------------------------------------------------------------|*/
-void test_medium_size1(char *argv[], int tar, struct tar_t *header) {
+
+void test_medium_size1(char *argv[], int fd, struct tar_t *header) {
 //---------------modify first header-------------------
 
-    int ret = fillHeader( argv, tar, header, SIZE, 12,1);
+    int ret = fillHeader( argv, fd, header, SIZE, 12,1);
 
     if(ret == 1){
         printf("size bugged : %s\n",header->size);
@@ -369,36 +327,33 @@ void test_medium_size1(char *argv[], int tar, struct tar_t *header) {
     }
 
 //---------------modify second header-----------------
-    setup(tar,header,MEDIUM);
+    setup(fd,header,MEDIUM);
     // go to next header
     int ONE = 1;
     if(TAR_INT(header->size)%512 == 0){
         ONE = 0;
     }
-    lseek(tar,(TAR_INT(header->size)/512 + ONE) *512,SEEK_CUR);
+    lseek(fd,(TAR_INT(header->size)/512 + ONE) *512,SEEK_CUR);
 
     //read next header
-    if (read(tar, (void*) header, sizeof(struct tar_t)) == -1) {
+    if (read(fd, (void*) header, sizeof(struct tar_t)) == -1) {
         printf("Error reading file!\n");
         return;
     }
 
     printf("second header name : %s\n",header->name);
 
-    ret = fillHeader( argv, tar, header, SIZE, 12, 1);
+    ret = fillHeader( argv, fd, header, SIZE, 12, 1);
     if(ret == 1){
         printf("size bugged : %s\n",header->size);
         system("cp archives/archive.tar success_size.tar");
     }
 }
 
-/*
-    Test by remplacing the content of a ".txt" file with (possible) non-ASCII character
-*/
-void test_medium_nonASCII_data(char *argv[], int tar,  struct tar_t *header){
+void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header){
 //------------first test on first file----------
     int ret;
-    setup(tar, header, MEDIUM);
+    setup(fd, header, MEDIUM);
 
     //fd pointer is already pointing after the first header
 
@@ -408,7 +363,7 @@ void test_medium_nonASCII_data(char *argv[], int tar,  struct tar_t *header){
         buffer[i] = i;//fill with whatever character
     }
 
-    if (write(tar, (void *) buffer, 256) == -1) {
+    if (write(fd, (void *) buffer, 256) == -1) {
         printf("Error writing file!\n");
         return;
     }
@@ -423,15 +378,15 @@ void test_medium_nonASCII_data(char *argv[], int tar,  struct tar_t *header){
 //---------second test on second file----------
 
     // go after next header
-    lseek(tar, 0, SEEK_SET);
+    lseek(fd, 0, SEEK_SET);
     int ONE = 1;
     if(TAR_INT(header->size)%512 == 0){
         ONE = 0;
     }
-    lseek(tar,(TAR_INT(header->size)/512 + ONE + 2) *512,SEEK_CUR);
+    lseek(fd,(TAR_INT(header->size)/512 + ONE + 2) *512,SEEK_CUR);
 
 
-    if (write(tar, (void *) buffer, 256) == -1) {
+    if (write(fd, (void *) buffer, 256) == -1) {
         printf("Error writing file!\n");
         return;
     }
@@ -444,25 +399,15 @@ void test_medium_nonASCII_data(char *argv[], int tar,  struct tar_t *header){
 }
 
 
-/*|-----------------------------------------------------------------|*/
-/*|                        TEST with linkname                       |*/
-/*|-----------------------------------------------------------------|*/
-void test_linked_linkname(char *argv[], int tar, struct tar_t *header) {
-    int ret = fillHeader(argv,tar,header,LINKNAME,100,0);
+void test_linked_linkname(char *argv[], int fd, struct tar_t *header) {
+    int ret = fillHeader(argv,fd,header,LINKNAME,100,0);
     if(ret == 1){
         printf("linkname bugged : %s\n",header->linkname);
         system("cp archives/archive.tar success_linkname.tar");
     }
 }
 
-/*
-Test an archive with a folder who has a size non-null with some data
-
-&&
-
-Test by wrinting data in the end pading field
-*/
-void test_dir_adding_data(char* argv[], int tar, struct tar_t *header){
+void test_dir_adding_data(char* argv[], int fd, struct tar_t *header){
     int ret =0;
 
     //set size to 500
@@ -472,8 +417,8 @@ void test_dir_adding_data(char* argv[], int tar, struct tar_t *header){
 
     calculate_checksum(header);
 
-    lseek(tar, 0, SEEK_SET);
-    if (write(tar, (void *) header, sizeof(struct tar_t)) == -1) {
+    lseek(fd, 0, SEEK_SET);
+    if (write(fd, (void *) header, sizeof(struct tar_t)) == -1) {
         printf("Error writing file!\n");
         return;
     }
@@ -487,7 +432,7 @@ void test_dir_adding_data(char* argv[], int tar, struct tar_t *header){
     }
     
     //write the data after the headers
-    if (write(tar, (void *) bonus, 500) == -1) {
+    if (write(fd, (void *) bonus, 500) == -1) {
         printf("Error writing file!\n");
         return;
     }
@@ -504,7 +449,7 @@ void test_dir_adding_data(char* argv[], int tar, struct tar_t *header){
 
     for (int i = 0; i < 20; i++)
     {
-        if (write(tar, (void *) bonus, 500) == -1) {
+        if (write(fd, (void *) bonus, 500) == -1) {
             printf("Error writing file!\n");
             return;
         }

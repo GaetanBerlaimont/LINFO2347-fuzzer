@@ -2,44 +2,192 @@
 #define SRC_TEST_H
 #include "util.h"
 
-void test_name1(char *argv[], int tar, struct tar_t *header);
-void test_name2(char *argv[], int tar, struct tar_t *header);
 
-void test_mode1(char *argv[], int tar, struct tar_t *header);
+/**
+ * This test checks if the extractor can handle large length values and
+ * if it crashes or shows unexpected behavior when processing such values
+ * in the len field. It tests this with a set of random large length values
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_name1(char *argv[], int fd, struct tar_t *header);
 
-void test_uid1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_name2(char *argv[], int fd, struct tar_t *header);
 
-void test_gid1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_mode1(char *argv[], int fd, struct tar_t *header);
 
-void test_size1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_uid1(char *argv[], int fd, struct tar_t *header);
 
-void test_mtime1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_gid1(char *argv[], int fd, struct tar_t *header);
 
-void test_typeflag1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_size1(char *argv[], int fd, struct tar_t *header);
 
-void test_linkname1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_mtime1(char *argv[], int fd, struct tar_t *header);
 
-void test_magic1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_typeflag1(char *argv[], int fd, struct tar_t *header);
 
-void test_version1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_linkname1(char *argv[], int fd, struct tar_t *header);
 
-void test_uname1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_magic1(char *argv[], int fd, struct tar_t *header);
 
-void test_gname1(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_version1(char *argv[], int fd, struct tar_t *header);
 
-void test_0byte(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_uname1(char *argv[], int fd, struct tar_t *header);
 
-void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_gname1(char *argv[], int fd, struct tar_t *header);
 
-void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_0byte(char *argv[], int fd, struct tar_t *header);
 
-void test_medium_size1(char *argv[], int tar, struct tar_t *header);
+/**
+ * Test vulnerablility related to handling large checksum values in the tar header.
+ * Generates random octal numbers within maximum range
+ * for a 7-character checksum and calls chksum_single_test with each value.
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header);
 
-void test_medium_nonASCII_data(char *argv[], int tar,  struct tar_t *header);
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_chksum_field_overflow(char *argv[], int fd, struct tar_t *header);
 
-void test_linked_linkname(char *argv[], int tar, struct tar_t *header);
+/**
+ * This function tests vulnerablility for handling very long checksum strings in the tar header.
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_medium_size1(char *argv[], int fd, struct tar_t *header);
 
-void test_dir_adding_data(char* argv[], int tar, struct tar_t *header);
+/**
+ * Test remplacing the content of a ".txt" file with (possible) non-ASCII character
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header);
+
+/**
+ *
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_linked_linkname(char *argv[], int fd, struct tar_t *header);
+
+/**
+ * Test an archive with a folder who has a size non-null with some data
+ * and
+ * Test by wrinting data in the end pading field
+ * @param argv contains the extractor name as first argument
+ * @param fd file descriptor
+ * @param header pointer to a header structure
+ *
+ */
+void test_dir_adding_data(char* argv[], int fd, struct tar_t *header);
 
 
 #endif //SRC_TEST_H

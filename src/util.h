@@ -74,12 +74,12 @@ unsigned int calculate_checksum(struct tar_t* entry);
  * and pre load the first header by reading the first sizeof(struct tar_t) bytes.
  * @param fd file descriptor
  * @param header pointer to a header structure
- * @param wich_tar flag to know wich archive it need to copy
+ * @param which_tar flag to know which archive it need to copy
  * @return -1 if an error occurred,
  *          0 if everything went good.
  *
  */
-int setup(int fd, struct tar_t *header, int wich_tar);
+int setup(int fd, struct tar_t *header, int which_tar);
 
 /**
  * try some combinations of all char value (from -128 to 127) in the current specified field, and launch the extractor.
@@ -88,7 +88,7 @@ int setup(int fd, struct tar_t *header, int wich_tar);
  * @param argv argument from main fct
  * @param fd file descriptor
  * @param header pointer to a header structure
- * @param wich_elem some flag value to know which elemnent from the header will be tested
+ * @param which_elem some flag value to know which element from the header will be tested
  * @param size maximum number of char for which_elem
  * @param reset if set to 1 will reset value of previous position to 0
  * @return -1 if an error occurred,
@@ -96,6 +96,6 @@ int setup(int fd, struct tar_t *header, int wich_tar);
  *          1 if a crash for the extractor is found.
  *
  */
-int fillHeader( char* argv[], int fd, struct tar_t *header, int wich_elem, int size, int reset);
+int fillHeader( char* argv[], int fd, struct tar_t *header, int which_elem, int size, int reset);
 
 #endif
