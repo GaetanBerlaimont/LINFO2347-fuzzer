@@ -24,7 +24,7 @@ void test_name1(char *argv[], int fd, struct tar_t *header);
 void test_name2(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the mode field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -33,7 +33,7 @@ void test_name2(char *argv[], int fd, struct tar_t *header);
 void test_mode1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the uid field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -42,7 +42,7 @@ void test_mode1(char *argv[], int fd, struct tar_t *header);
 void test_uid1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the gid field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -51,7 +51,7 @@ void test_uid1(char *argv[], int fd, struct tar_t *header);
 void test_gid1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the size field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -60,7 +60,7 @@ void test_gid1(char *argv[], int fd, struct tar_t *header);
 void test_size1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the mtime field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -69,7 +69,7 @@ void test_size1(char *argv[], int fd, struct tar_t *header);
 void test_mtime1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the typeflag field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -78,7 +78,7 @@ void test_mtime1(char *argv[], int fd, struct tar_t *header);
 void test_typeflag1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the linkname field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -87,7 +87,7 @@ void test_typeflag1(char *argv[], int fd, struct tar_t *header);
 void test_linkname1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the magic field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -96,7 +96,7 @@ void test_linkname1(char *argv[], int fd, struct tar_t *header);
 void test_magic1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the version field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -105,7 +105,7 @@ void test_magic1(char *argv[], int fd, struct tar_t *header);
 void test_version1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the uname field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -114,7 +114,7 @@ void test_version1(char *argv[], int fd, struct tar_t *header);
 void test_uname1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test every possible char for every possible position for the gname field
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -123,7 +123,7 @@ void test_uname1(char *argv[], int fd, struct tar_t *header);
 void test_gname1(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test an empty archive
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure
@@ -143,7 +143,7 @@ void test_0byte(char *argv[], int fd, struct tar_t *header);
 void test_chksum_MAX_multiple(char *argv[], int fd, struct tar_t *header);
 
 /**
- *
+ * Test extending the field over the next one
  * @param argv contains the extractor name as first argument
  * @param fd file descriptor
  * @param header pointer to a header structure

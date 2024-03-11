@@ -6,7 +6,7 @@ PROG := fuzzer
 OBJS := src/fuzzer.o src/util.o src/test.o
 
 all: $(PROG)
-	./fuzzer ./extractor_x86_64
+
 
 %.o: src/%.c
 	$(CC) -c $(CFLAGS) src/fuzzer.c
