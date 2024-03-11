@@ -6,10 +6,39 @@
 #include "test.h"
 #include "util.h"
 
-
+/**
+ * Perform test based on the archive "archive_basic.tar" wich contain only an empty ".txt" file.
+ * The first test duplicate the header with non ASCII name value.
+ * The others tests are simple, just try for every field all possible characters (256 different value)
+ * @param argv: the argument passed from the main fct
+ * @return 0 if nothing wrong happened, -1 otherwise.
+ */
 int basic(char* argv[]);
+
+/**
+ * Perform test based on the archive "archive_medium.tar" which contain 2 ."txt" files with data.
+ * This will test if the extractor can cope with different size value for 2 files.
+ * @param argv: the argument passed from the main fct
+ * @return 0 if nothing wrong happened, -1 otherwise.
+ */
 int medium(char* argv[]);
+
+/**
+ * Perform test based on the archive "archive_linked.tar" which contain a ."txt" file with data and a simbolic link for that file.
+ * Test whether the extractor can manage an archive with a simbolinc link that point to wrong name (aka linkname).
+ * Test also the case where the simbolic link point to iself.
+ * @param argv: the argument passed from the main fct
+ * @return 0 if nothing wrong happened, -1 otherwise.
+ */
 int linked(char *argv[]);
+
+/**
+ * Perform test based on the archive "archive_dir.tar" which contain only an empty folder.
+ * The first test will add size and data to the folder which normaly can't have, and the second test will replace
+ * all the 0x0 bytes of the end of the archive by some value.
+ * @param argv: the argument passed from the main fct
+ * @return 0 if nothing wrong happened, -1 otherwise.
+ */
 int dir(char *argv[]);
 
 
