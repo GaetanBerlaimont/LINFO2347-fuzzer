@@ -108,6 +108,8 @@ int medium(char* argv[]){
 
     test_medium_size1(argv, tar, header);
 
+    test_medium_nonASCII_data(argv, tar, header);
+
     finally:
     if(close(tar) == -1) {
         printf("Command not found\n");
@@ -152,7 +154,6 @@ int dir(char *argv[]){
     //initialisation variable
     int tar;// folder
     struct tar_t *header;
-    int ret;
     header = (struct tar_t *) malloc(sizeof(struct tar_t));
 
     //create a copy of the archive and perform test on the copied one
@@ -168,28 +169,7 @@ int dir(char *argv[]){
         goto finally;
     }
 
-    header->size[10] = '1';//ajoute que 1 seul caract TODO plus ex jusqu'a 20 ou 50...
-    calculate_checksum(header);
-    printf("size : %s\n",header->size);
-
-    lseek(tar, 0, SEEK_SET);
-    if (write(tar, (void *) header, sizeof(struct tar_t)) == -1) {
-        printf("Error writing file!\n");
-        return -1;
-    }
-    char c = -128;// peut etre n'importe quoi
-    if (write(tar, (void *) &c, 1) == -1) {
-        printf("Error writing file!\n");
-        return -1;
-    }
-
-    ret = launch(argv);
-
-    if (ret == 1) {
-        printf("cheksum bugged = %s\n", header->chksum);
-        system("cp archives/archive.tar success_size+data.tar");
-        return 1;
-    }
+    test_dir_adding_data(argv, tar, header);
 
     finally:
     if(close(tar) == -1) {

@@ -275,6 +275,7 @@ void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
 {
     setup(tar, header,BASIC);
 
+//------first we ensure that the first case is the maximum possible value--------------
     sprintf(header->chksum,"%o",2097151);//'7777777'
 
     lseek(tar,0,SEEK_SET);
@@ -292,6 +293,7 @@ void test_chksum_MAX_multiple(char *argv[], int tar, struct tar_t *header)
         return;
     }
 
+//----------after we test 10 times for some big value----------------------
     int counter = 0;
     while(ret == 0 && counter < 10) {
         int upper = 2097151; // max octal number for 7 char
@@ -357,7 +359,7 @@ void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header)
 /*|                          TEST with size                         |*/
 /*|-----------------------------------------------------------------|*/
 void test_medium_size1(char *argv[], int tar, struct tar_t *header) {
-    //---------modify first header--------------
+//---------------modify first header-------------------
 
     int ret = fillHeader( argv, tar, header, SIZE, 12,1);
 
@@ -366,7 +368,7 @@ void test_medium_size1(char *argv[], int tar, struct tar_t *header) {
         system("cp archives/archive.tar success_size.tar");
     }
 
-    //---------modify second header-----------
+//---------------modify second header-----------------
     setup(tar,header,MEDIUM);
     // go to next header
     int ONE = 1;
@@ -390,6 +392,58 @@ void test_medium_size1(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
+/*
+    Test by remplacing the content of a ".txt" file with (possible) non-ASCII character
+*/
+void test_medium_nonASCII_data(char *argv[], int tar,  struct tar_t *header){
+//------------first test on first file----------
+    int ret;
+    setup(tar, header, MEDIUM);
+
+    //fd pointer is already pointing after the first header
+
+    char buffer[256];
+    for (int i = 0; i < 256; i++)
+    {
+        buffer[i] = i;//fill with whatever character
+    }
+
+    if (write(tar, (void *) buffer, 256) == -1) {
+        printf("Error writing file!\n");
+        return;
+    }
+    
+    ret = launch(argv);
+    if(ret == 1){
+        printf("non ACSII content bugged \n");
+        system("cp archives/archive.tar success_nonASCII_content.tar");
+    }
+
+
+//---------second test on second file----------
+
+    // go after next header
+    lseek(tar, 0, SEEK_SET);
+    int ONE = 1;
+    if(TAR_INT(header->size)%512 == 0){
+        ONE = 0;
+    }
+    lseek(tar,(TAR_INT(header->size)/512 + ONE + 2) *512,SEEK_CUR);
+
+
+    if (write(tar, (void *) buffer, 256) == -1) {
+        printf("Error writing file!\n");
+        return;
+    }
+    
+    ret = launch(argv);
+    if(ret == 1){
+        printf("non ACSII content bugged \n");
+        system("cp archives/archive.tar success_nonASCII_content.tar");
+    }
+}
+
+
 /*|-----------------------------------------------------------------|*/
 /*|                        TEST with linkname                       |*/
 /*|-----------------------------------------------------------------|*/
@@ -401,6 +455,68 @@ void test_linked_linkname(char *argv[], int tar, struct tar_t *header) {
     }
 }
 
+/*
+Test an archive with a folder who has a size non-null with some data
+
+&&
+
+Test by wrinting data in the end pading field
+*/
+void test_dir_adding_data(char* argv[], int tar, struct tar_t *header){
+    int ret =0;
+
+    //set size to 500
+    header->size[10] = '0';
+    header->size[9] = '0';
+    header->size[8] = '5';
+
+    calculate_checksum(header);
+
+    lseek(tar, 0, SEEK_SET);
+    if (write(tar, (void *) header, sizeof(struct tar_t)) == -1) {
+        printf("Error writing file!\n");
+        return;
+    }
+
+    //buffer who will contain the data
+    char bonus[500];
+
+    for (int pos = 0; pos < 500; pos++)
+    {
+        bonus[pos] = pos;
+    }
+    
+    //write the data after the headers
+    if (write(tar, (void *) bonus, 500) == -1) {
+        printf("Error writing file!\n");
+        return;
+    }
+
+    ret = launch(argv);
+
+    if (ret == 1) {
+        printf("dir bugged\n");
+        system("cp archives/archive.tar success_size+data.tar");
+    }
 
 
+    //Second test by overwriting the 00 byte until the end
+
+    for (int i = 0; i < 20; i++)
+    {
+        if (write(tar, (void *) bonus, 500) == -1) {
+            printf("Error writing file!\n");
+            return;
+        }
+    }
+
+    ret = launch(argv);
+
+    if (ret == 1) {
+        printf("dir bugged\n");
+        system("cp archives/archive.tar success_padding_overwriting.tar");
+        return;
+    }
+    
+}
 

@@ -37,8 +37,11 @@ visu:
 	hexdump -C archives/archive_basic.tar >  tar_contents/visu_basic.txt
 	hexdump -C archives/archive_medium.tar > tar_contents/visu_medium.txt
 	hexdump -C archives/archive_linked.tar > tar_contents/visu_linked.txt
-	hexdump -C archives/archive_dir.tar > tar_contents/visu_dir.txt
-	hexdump -C archives/archive.tar > tar_contents/current.txt
+	hexdump -C -v archives/archive_dir.tar > tar_contents/visu_dir.txt
+	hexdump -C -v archives/archive.tar > tar_contents/current.txt
 
 clean:
 	rm -f src/*.o
+	rm -f fable.txt
+	rm -f vide.txt
+	rm -f wikipedia_pokemon.txt

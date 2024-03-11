@@ -35,7 +35,11 @@ void test_chksum_field_overflow(char *argv[], int tar, struct tar_t *header);
 
 void test_medium_size1(char *argv[], int tar, struct tar_t *header);
 
+void test_medium_nonASCII_data(char *argv[], int tar,  struct tar_t *header);
+
 void test_linked_linkname(char *argv[], int tar, struct tar_t *header);
+
+void test_dir_adding_data(char* argv[], int tar, struct tar_t *header);
 
 
 #endif //SRC_TEST_H
