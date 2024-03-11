@@ -400,7 +400,7 @@ void test_medium_nonASCII_data(char *argv[], int fd,  struct tar_t *header){
 
 
 
-void test_linked_linkname(char *argv[], int tar, struct tar_t *header) {
+void test_linked_linkname(char *argv[], int fd, struct tar_t *header) {
 //---------------First test------------------------
     //ensure that we test the case where linkname=name
     int ret = fillHeader(argv,fd,header,LINKNAME,100,0);;
@@ -408,8 +408,8 @@ void test_linked_linkname(char *argv[], int tar, struct tar_t *header) {
     sprintf(header->linkname, "%s", header->name);
     calculate_checksum(header);
 
-    lseek(tar, 0, SEEK_SET);
-    if (write(tar, (void *) header, sizeof(struct tar_t)) == -1) {
+    lseek(fd, 0, SEEK_SET);
+    if (write(fd, (void *) header, sizeof(struct tar_t)) == -1) {
         printf("Error writing file!\n");
         return;
     }
@@ -421,8 +421,8 @@ void test_linked_linkname(char *argv[], int tar, struct tar_t *header) {
         system("cp archives/archive.tar success_linkname.tar");
     }
 //---------------Other test------------------------
-    ret = fillHeader(argv,tar,header,LINKNAME,100,0);
-    
+    ret = fillHeader(argv,fd,header,LINKNAME,100,0);
+
     if(ret == 1){
         printf("linkname bugged : %s\n",header->linkname);
         system("cp archives/archive.tar success_linkname.tar");
